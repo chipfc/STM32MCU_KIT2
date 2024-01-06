@@ -1,0 +1,9 @@
+ws2812b.c:64:6:setLEDData	8	static
+ws2812b.c:81:6:clear_ws2812b_buffer	4	static
+ws2812b.c:133:6:WS2812B_Write	24	static,ignoring_inline_asm
+ws2812b.c:71:6:setLED	4	static
+ws2812b.c:40:6:animateSine	64	static
+ws2812b.c:55:6:setAllLEDs	32	static
+ws2812b.c:24:6:initWs2812b	24	static
+ws2812b.c:87:6:running_example	24	static
+ws2812b.c:28:6:running	16	static

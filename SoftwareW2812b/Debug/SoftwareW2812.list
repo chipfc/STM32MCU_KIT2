@@ -31,21 +31,21 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  13 .debug_abbrev 00001475  00000000  00000000  00025996  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_loc    0000175d  00000000  00000000  00026e0b  2**0
+ 14 .debug_aranges 000003a0  00000000  00000000  00026e10  2**3
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_aranges 000003a0  00000000  00000000  00028568  2**3
+ 15 .debug_ranges 00000760  00000000  00000000  000271b0  2**3
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_ranges 00000760  00000000  00000000  00028908  2**3
+ 16 .debug_macro  00016e0e  00000000  00000000  00027910  2**0
                   CONTENTS, READONLY, DEBUGGING
- 17 .debug_macro  00016e0e  00000000  00000000  00029068  2**0
+ 17 .debug_line   0000498b  00000000  00000000  0003e71e  2**0
                   CONTENTS, READONLY, DEBUGGING
- 18 .debug_line   0000497f  00000000  00000000  0003fe76  2**0
+ 18 .debug_str    00086416  00000000  00000000  000430a9  2**0
                   CONTENTS, READONLY, DEBUGGING
- 19 .debug_str    000863c2  00000000  00000000  000447f5  2**0
-                  CONTENTS, READONLY, DEBUGGING
- 20 .comment      0000007b  00000000  00000000  000cabb7  2**0
+ 19 .comment      0000007b  00000000  00000000  000c94bf  2**0
                   CONTENTS, READONLY
- 21 .debug_frame  0000089c  00000000  00000000  000cac34  2**2
+ 20 .debug_frame  0000089c  00000000  00000000  000c953c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 21 .debug_loc    0000175d  00000000  00000000  000c9dd8  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -78,226 +78,357 @@ Disassembly of section .text:
  8000144:	20000020 	.word	0x20000020
  8000148:	0800112c 	.word	0x0800112c
 
-0800014c <WS2812B_Write>:
+0800014c <SystemClock_Config>:
+/**
+  * @brief System Clock Configuration
+  * @retval None
+  */
+void SystemClock_Config(void)
+{
+ 800014c:	b530      	push	{r4, r5, lr}
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
+  /** Initializes the CPU, AHB and APB busses clocks 
+  */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+ 800014e:	2201      	movs	r2, #1
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+ 8000150:	2400      	movs	r4, #0
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+ 8000152:	f44f 3380 	mov.w	r3, #65536	; 0x10000
+  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+ 8000156:	2502      	movs	r5, #2
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
+ 8000158:	f44f 11e0 	mov.w	r1, #1835008	; 0x1c0000
+{
+ 800015c:	b091      	sub	sp, #68	; 0x44
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+ 800015e:	a806      	add	r0, sp, #24
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+ 8000160:	9206      	str	r2, [sp, #24]
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+ 8000162:	920a      	str	r2, [sp, #40]	; 0x28
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+ 8000164:	9307      	str	r3, [sp, #28]
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+ 8000166:	e9cd 530d 	strd	r5, r3, [sp, #52]	; 0x34
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
+ 800016a:	910f      	str	r1, [sp, #60]	; 0x3c
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+ 800016c:	9408      	str	r4, [sp, #32]
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+ 800016e:	9401      	str	r4, [sp, #4]
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+ 8000170:	9409      	str	r4, [sp, #36]	; 0x24
+ 8000172:	e9cd 440b 	strd	r4, r4, [sp, #44]	; 0x2c
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+ 8000176:	e9cd 4402 	strd	r4, r4, [sp, #8]
+ 800017a:	e9cd 4404 	strd	r4, r4, [sp, #16]
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+ 800017e:	f000 fced 	bl	8000b5c <HAL_RCC_OscConfig>
+  {
+    Error_Handler();
+  }
+  /** Initializes the CPU, AHB and APB busses clocks 
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+ 8000182:	220f      	movs	r2, #15
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+ 8000184:	f44f 6380 	mov.w	r3, #1024	; 0x400
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+ 8000188:	a801      	add	r0, sp, #4
+ 800018a:	4629      	mov	r1, r5
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+ 800018c:	e9cd 5402 	strd	r5, r4, [sp, #8]
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+ 8000190:	9405      	str	r4, [sp, #20]
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+ 8000192:	9201      	str	r2, [sp, #4]
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+ 8000194:	9304      	str	r3, [sp, #16]
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+ 8000196:	f000 fed9 	bl	8000f4c <HAL_RCC_ClockConfig>
+  {
+    Error_Handler();
+  }
+}
+ 800019a:	b011      	add	sp, #68	; 0x44
+ 800019c:	bd30      	pop	{r4, r5, pc}
+ 800019e:	bf00      	nop
+
+080001a0 <main>:
+  * @param None
+  * @retval None
+  */
+static void MX_GPIO_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+ 80001a0:	2400      	movs	r4, #0
+{
+ 80001a2:	b500      	push	{lr}
+ 80001a4:	b089      	sub	sp, #36	; 0x24
+  HAL_Init();
+ 80001a6:	f000 fb45 	bl	8000834 <HAL_Init>
+  SystemClock_Config();
+ 80001aa:	f7ff ffcf 	bl	800014c <SystemClock_Config>
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+ 80001ae:	e9cd 4404 	strd	r4, r4, [sp, #16]
+ 80001b2:	e9cd 4406 	strd	r4, r4, [sp, #24]
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOD_CLK_ENABLE();
+ 80001b6:	4b19      	ldr	r3, [pc, #100]	; (800021c <main+0x7c>)
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
+ 80001b8:	2201      	movs	r2, #1
+  __HAL_RCC_GPIOD_CLK_ENABLE();
+ 80001ba:	6999      	ldr	r1, [r3, #24]
+
+  /*Configure GPIO pin : PB3 */
+  GPIO_InitStruct.Pin = GPIO_PIN_3;
+ 80001bc:	2508      	movs	r5, #8
+  __HAL_RCC_GPIOD_CLK_ENABLE();
+ 80001be:	f041 0120 	orr.w	r1, r1, #32
+ 80001c2:	6199      	str	r1, [r3, #24]
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
+ 80001c4:	2108      	movs	r1, #8
+  __HAL_RCC_GPIOD_CLK_ENABLE();
+ 80001c6:	6998      	ldr	r0, [r3, #24]
+ 80001c8:	f000 0020 	and.w	r0, r0, #32
+ 80001cc:	9001      	str	r0, [sp, #4]
+ 80001ce:	9801      	ldr	r0, [sp, #4]
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+ 80001d0:	6998      	ldr	r0, [r3, #24]
+ 80001d2:	f040 0004 	orr.w	r0, r0, #4
+ 80001d6:	6198      	str	r0, [r3, #24]
+ 80001d8:	6998      	ldr	r0, [r3, #24]
+ 80001da:	f000 0004 	and.w	r0, r0, #4
+ 80001de:	9002      	str	r0, [sp, #8]
+ 80001e0:	9802      	ldr	r0, [sp, #8]
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+ 80001e2:	6998      	ldr	r0, [r3, #24]
+ 80001e4:	4308      	orrs	r0, r1
+ 80001e6:	6198      	str	r0, [r3, #24]
+ 80001e8:	699b      	ldr	r3, [r3, #24]
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
+ 80001ea:	480d      	ldr	r0, [pc, #52]	; (8000220 <main+0x80>)
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+ 80001ec:	400b      	ands	r3, r1
+ 80001ee:	9303      	str	r3, [sp, #12]
+ 80001f0:	9b03      	ldr	r3, [sp, #12]
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
+ 80001f2:	f000 fcaf 	bl	8000b54 <HAL_GPIO_WritePin>
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 80001f6:	2201      	movs	r2, #1
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+ 80001f8:	2303      	movs	r3, #3
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+ 80001fa:	a904      	add	r1, sp, #16
+ 80001fc:	4808      	ldr	r0, [pc, #32]	; (8000220 <main+0x80>)
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 80001fe:	e9cd 5204 	strd	r5, r2, [sp, #16]
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+ 8000202:	9307      	str	r3, [sp, #28]
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 8000204:	9406      	str	r4, [sp, #24]
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+ 8000206:	f000 fbab 	bl	8000960 <HAL_GPIO_Init>
+  initWs2812b();
+ 800020a:	f000 fa6b 	bl	80006e4 <initWs2812b>
+    	running_example();
+ 800020e:	f000 fa7d 	bl	800070c <running_example>
+        HAL_Delay(1000);
+ 8000212:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
+ 8000216:	f000 fb31 	bl	800087c <HAL_Delay>
+ 800021a:	e7f8      	b.n	800020e <main+0x6e>
+ 800021c:	40021000 	.word	0x40021000
+ 8000220:	40010c00 	.word	0x40010c00
+
+08000224 <HAL_MspInit>:
+{
+  /* USER CODE BEGIN MspInit 0 */
+
+  /* USER CODE END MspInit 0 */
+
+  __HAL_RCC_AFIO_CLK_ENABLE();
+ 8000224:	4b0e      	ldr	r3, [pc, #56]	; (8000260 <HAL_MspInit+0x3c>)
+{
+ 8000226:	b082      	sub	sp, #8
+  __HAL_RCC_AFIO_CLK_ENABLE();
+ 8000228:	699a      	ldr	r2, [r3, #24]
+
+  /* System interrupt init*/
+
+  /** NOJTAG: JTAG-DP Disabled and SW-DP Enabled 
+  */
+  __HAL_AFIO_REMAP_SWJ_NOJTAG();
+ 800022a:	490e      	ldr	r1, [pc, #56]	; (8000264 <HAL_MspInit+0x40>)
+  __HAL_RCC_AFIO_CLK_ENABLE();
+ 800022c:	f042 0201 	orr.w	r2, r2, #1
+ 8000230:	619a      	str	r2, [r3, #24]
+ 8000232:	699a      	ldr	r2, [r3, #24]
+ 8000234:	f002 0201 	and.w	r2, r2, #1
+ 8000238:	9200      	str	r2, [sp, #0]
+ 800023a:	9a00      	ldr	r2, [sp, #0]
+  __HAL_RCC_PWR_CLK_ENABLE();
+ 800023c:	69da      	ldr	r2, [r3, #28]
+ 800023e:	f042 5280 	orr.w	r2, r2, #268435456	; 0x10000000
+ 8000242:	61da      	str	r2, [r3, #28]
+ 8000244:	69db      	ldr	r3, [r3, #28]
+ 8000246:	f003 5380 	and.w	r3, r3, #268435456	; 0x10000000
+ 800024a:	9301      	str	r3, [sp, #4]
+ 800024c:	9b01      	ldr	r3, [sp, #4]
+  __HAL_AFIO_REMAP_SWJ_NOJTAG();
+ 800024e:	684b      	ldr	r3, [r1, #4]
+ 8000250:	f023 63e0 	bic.w	r3, r3, #117440512	; 0x7000000
+ 8000254:	f043 7300 	orr.w	r3, r3, #33554432	; 0x2000000
+ 8000258:	604b      	str	r3, [r1, #4]
+
+  /* USER CODE BEGIN MspInit 1 */
+
+  /* USER CODE END MspInit 1 */
+}
+ 800025a:	b002      	add	sp, #8
+ 800025c:	4770      	bx	lr
+ 800025e:	bf00      	nop
+ 8000260:	40021000 	.word	0x40021000
+ 8000264:	40010000 	.word	0x40010000
+
+08000268 <NMI_Handler>:
+
+  /* USER CODE END NonMaskableInt_IRQn 0 */
+  /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
+
+  /* USER CODE END NonMaskableInt_IRQn 1 */
+}
+ 8000268:	4770      	bx	lr
+ 800026a:	bf00      	nop
+
+0800026c <HardFault_Handler>:
+
+/**
+  * @brief This function handles Hard fault interrupt.
+  */
+void HardFault_Handler(void)
+{
+ 800026c:	e7fe      	b.n	800026c <HardFault_Handler>
+ 800026e:	bf00      	nop
+
+08000270 <MemManage_Handler>:
+
+/**
+  * @brief This function handles Memory management fault.
+  */
+void MemManage_Handler(void)
+{
+ 8000270:	e7fe      	b.n	8000270 <MemManage_Handler>
+ 8000272:	bf00      	nop
+
+08000274 <BusFault_Handler>:
+
+/**
+  * @brief This function handles Prefetch fault, memory access fault.
+  */
+void BusFault_Handler(void)
+{
+ 8000274:	e7fe      	b.n	8000274 <BusFault_Handler>
+ 8000276:	bf00      	nop
+
+08000278 <UsageFault_Handler>:
+
+/**
+  * @brief This function handles Undefined instruction or illegal state.
+  */
+void UsageFault_Handler(void)
+{
+ 8000278:	e7fe      	b.n	8000278 <UsageFault_Handler>
+ 800027a:	bf00      	nop
+
+0800027c <SVC_Handler>:
+ 800027c:	4770      	bx	lr
+ 800027e:	bf00      	nop
+
+08000280 <DebugMon_Handler>:
+ 8000280:	4770      	bx	lr
+ 8000282:	bf00      	nop
+
+08000284 <PendSV_Handler>:
+ 8000284:	4770      	bx	lr
+ 8000286:	bf00      	nop
+
+08000288 <SysTick_Handler>:
+void SysTick_Handler(void)
+{
+  /* USER CODE BEGIN SysTick_IRQn 0 */
+
+  /* USER CODE END SysTick_IRQn 0 */
+  HAL_IncTick();
+ 8000288:	f000 bae6 	b.w	8000858 <HAL_IncTick>
+
+0800028c <SystemInit>:
+
+  /* Configure the Vector Table location -------------------------------------*/
+#if defined(USER_VECT_TAB_ADDRESS)
+  SCB->VTOR = VECT_TAB_BASE_ADDRESS | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM. */
+#endif /* USER_VECT_TAB_ADDRESS */
+}
+ 800028c:	4770      	bx	lr
+ 800028e:	bf00      	nop
+
+08000290 <WS2812B_Write>:
   // +300ns
   __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
 
 }
 void WS2812B_Write(WS2812B_t* ws2812b) {
   for (uint16_t i = 0; i < ws2812b->num_leds; i++) {
- 800014c:	8883      	ldrh	r3, [r0, #4]
+ 8000290:	8883      	ldrh	r3, [r0, #4]
 void WS2812B_Write(WS2812B_t* ws2812b) {
- 800014e:	e92d 41f0 	stmdb	sp!, {r4, r5, r6, r7, r8, lr}
+ 8000292:	e92d 41f0 	stmdb	sp!, {r4, r5, r6, r7, r8, lr}
   for (uint16_t i = 0; i < ws2812b->num_leds; i++) {
- 8000152:	2b00      	cmp	r3, #0
- 8000154:	f000 8219 	beq.w	800058a <WS2812B_Write+0x43e>
- 8000158:	2600      	movs	r6, #0
+ 8000296:	2b00      	cmp	r3, #0
+ 8000298:	f000 8219 	beq.w	80006ce <WS2812B_Write+0x43e>
+ 800029c:	2600      	movs	r6, #0
     RGB_t led = ws2812b->leds[i];
- 800015a:	6805      	ldr	r5, [r0, #0]
- 800015c:	eb06 0446 	add.w	r4, r6, r6, lsl #1
- 8000160:	192b      	adds	r3, r5, r4
- 8000162:	f815 c004 	ldrb.w	ip, [r5, r4]
- 8000166:	2108      	movs	r1, #8
+ 800029e:	6805      	ldr	r5, [r0, #0]
+ 80002a0:	eb06 0446 	add.w	r4, r6, r6, lsl #1
+ 80002a4:	192b      	adds	r3, r5, r4
+ 80002a6:	f815 c004 	ldrb.w	ip, [r5, r4]
+ 80002aa:	2108      	movs	r1, #8
 
     // Green
     for (uint8_t mask = 0x80; mask != 0; mask >>= 1) {
- 8000168:	2280      	movs	r2, #128	; 0x80
+ 80002ac:	2280      	movs	r2, #128	; 0x80
     RGB_t led = ws2812b->leds[i];
- 800016a:	f893 8001 	ldrb.w	r8, [r3, #1]
- 800016e:	789d      	ldrb	r5, [r3, #2]
- 8000170:	e04f      	b.n	8000212 <WS2812B_Write+0xc6>
+ 80002ae:	f893 8001 	ldrb.w	r8, [r3, #1]
+ 80002b2:	789d      	ldrb	r5, [r3, #2]
+ 80002b4:	e04f      	b.n	8000356 <WS2812B_Write+0xc6>
   __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
- 8000172:	bf00      	nop
- 8000174:	bf00      	nop
- 8000176:	bf00      	nop
- 8000178:	bf00      	nop
- 800017a:	bf00      	nop
- 800017c:	bf00      	nop
- 800017e:	bf00      	nop
- 8000180:	bf00      	nop
- 8000182:	bf00      	nop
- 8000184:	bf00      	nop
- 8000186:	bf00      	nop
- 8000188:	bf00      	nop
- 800018a:	bf00      	nop
- 800018c:	bf00      	nop
- 800018e:	bf00      	nop
- 8000190:	bf00      	nop
- 8000192:	bf00      	nop
- 8000194:	bf00      	nop
- 8000196:	bf00      	nop
- 8000198:	bf00      	nop
- 800019a:	bf00      	nop
- 800019c:	bf00      	nop
- 800019e:	bf00      	nop
- 80001a0:	bf00      	nop
- 80001a2:	bf00      	nop
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
- 80001a4:	bf00      	nop
- 80001a6:	bf00      	nop
- 80001a8:	bf00      	nop
- 80001aa:	bf00      	nop
- 80001ac:	bf00      	nop
- 80001ae:	bf00      	nop
- 80001b0:	bf00      	nop
- 80001b2:	bf00      	nop
- 80001b4:	bf00      	nop
- 80001b6:	bf00      	nop
- 80001b8:	bf00      	nop
- 80001ba:	bf00      	nop
- 80001bc:	bf00      	nop
- 80001be:	bf00      	nop
- 80001c0:	bf00      	nop
- 80001c2:	bf00      	nop
- 80001c4:	bf00      	nop
- 80001c6:	bf00      	nop
- 80001c8:	bf00      	nop
- 80001ca:	bf00      	nop
- 80001cc:	bf00      	nop
- 80001ce:	bf00      	nop
- 80001d0:	bf00      	nop
- 80001d2:	bf00      	nop
- 80001d4:	bf00      	nop
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop");
- 80001d6:	bf00      	nop
- 80001d8:	bf00      	nop
- 80001da:	bf00      	nop
- 80001dc:	bf00      	nop
- 80001de:	bf00      	nop
-  port->ODR &= ~(pin);//Pin LOW - 120ns
- 80001e0:	68dc      	ldr	r4, [r3, #12]
- 80001e2:	4027      	ands	r7, r4
- 80001e4:	60df      	str	r7, [r3, #12]
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
- 80001e6:	bf00      	nop
- 80001e8:	bf00      	nop
- 80001ea:	bf00      	nop
- 80001ec:	bf00      	nop
- 80001ee:	bf00      	nop
- 80001f0:	bf00      	nop
- 80001f2:	bf00      	nop
- 80001f4:	bf00      	nop
- 80001f6:	bf00      	nop
- 80001f8:	bf00      	nop
- 80001fa:	bf00      	nop
- 80001fc:	bf00      	nop
- 80001fe:	bf00      	nop
- 8000200:	bf00      	nop
- 8000202:	bf00      	nop
- 8000204:	bf00      	nop
- 8000206:	bf00      	nop
- 8000208:	bf00      	nop
-    for (uint8_t mask = 0x80; mask != 0; mask >>= 1) {
- 800020a:	3901      	subs	r1, #1
- 800020c:	ea4f 0252 	mov.w	r2, r2, lsr #1
- 8000210:	d05a      	beq.n	80002c8 <WS2812B_Write+0x17c>
- 8000212:	6883      	ldr	r3, [r0, #8]
- 8000214:	8984      	ldrh	r4, [r0, #12]
-  port->ODR |= pin; //Pin HIGH - 120ns
- 8000216:	f8d3 e00c 	ldr.w	lr, [r3, #12]
- 800021a:	43e7      	mvns	r7, r4
-      if (led.g & mask) {
- 800021c:	ea18 0f02 	tst.w	r8, r2
-  port->ODR |= pin; //Pin HIGH - 120ns
- 8000220:	ea4e 0404 	orr.w	r4, lr, r4
- 8000224:	60dc      	str	r4, [r3, #12]
-      if (led.g & mask) {
- 8000226:	d1a4      	bne.n	8000172 <WS2812B_Write+0x26>
-	__asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
- 8000228:	bf00      	nop
- 800022a:	bf00      	nop
- 800022c:	bf00      	nop
- 800022e:	bf00      	nop
- 8000230:	bf00      	nop
- 8000232:	bf00      	nop
- 8000234:	bf00      	nop
- 8000236:	bf00      	nop
- 8000238:	bf00      	nop
- 800023a:	bf00      	nop
- 800023c:	bf00      	nop
- 800023e:	bf00      	nop
- 8000240:	bf00      	nop
- 8000242:	bf00      	nop
- 8000244:	bf00      	nop
- 8000246:	bf00      	nop
- 8000248:	bf00      	nop
- 800024a:	bf00      	nop
-  	port->ODR &= ~(pin); //Pin LOW - 120ns
- 800024c:	68dc      	ldr	r4, [r3, #12]
- 800024e:	4027      	ands	r7, r4
- 8000250:	60df      	str	r7, [r3, #12]
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
- 8000252:	bf00      	nop
- 8000254:	bf00      	nop
- 8000256:	bf00      	nop
- 8000258:	bf00      	nop
- 800025a:	bf00      	nop
- 800025c:	bf00      	nop
- 800025e:	bf00      	nop
- 8000260:	bf00      	nop
- 8000262:	bf00      	nop
- 8000264:	bf00      	nop
- 8000266:	bf00      	nop
- 8000268:	bf00      	nop
- 800026a:	bf00      	nop
- 800026c:	bf00      	nop
- 800026e:	bf00      	nop
- 8000270:	bf00      	nop
- 8000272:	bf00      	nop
- 8000274:	bf00      	nop
- 8000276:	bf00      	nop
- 8000278:	bf00      	nop
- 800027a:	bf00      	nop
- 800027c:	bf00      	nop
- 800027e:	bf00      	nop
- 8000280:	bf00      	nop
- 8000282:	bf00      	nop
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
- 8000284:	bf00      	nop
- 8000286:	bf00      	nop
- 8000288:	bf00      	nop
- 800028a:	bf00      	nop
- 800028c:	bf00      	nop
- 800028e:	bf00      	nop
- 8000290:	bf00      	nop
- 8000292:	bf00      	nop
- 8000294:	bf00      	nop
- 8000296:	bf00      	nop
- 8000298:	bf00      	nop
- 800029a:	bf00      	nop
- 800029c:	bf00      	nop
- 800029e:	bf00      	nop
- 80002a0:	bf00      	nop
- 80002a2:	bf00      	nop
- 80002a4:	bf00      	nop
- 80002a6:	bf00      	nop
- 80002a8:	bf00      	nop
- 80002aa:	bf00      	nop
- 80002ac:	bf00      	nop
- 80002ae:	bf00      	nop
- 80002b0:	bf00      	nop
- 80002b2:	bf00      	nop
- 80002b4:	bf00      	nop
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop");
  80002b6:	bf00      	nop
  80002b8:	bf00      	nop
  80002ba:	bf00      	nop
  80002bc:	bf00      	nop
  80002be:	bf00      	nop
-    for (uint8_t mask = 0x80; mask != 0; mask >>= 1) {
- 80002c0:	3901      	subs	r1, #1
- 80002c2:	ea4f 0252 	mov.w	r2, r2, lsr #1
- 80002c6:	d1a4      	bne.n	8000212 <WS2812B_Write+0xc6>
- 80002c8:	2108      	movs	r1, #8
-        send_zero(ws2812b->port, ws2812b->pin);
-      }
-    }
-
-    // Red
-    for (uint8_t mask = 0x80; mask != 0; mask >>= 1) {
- 80002ca:	2280      	movs	r2, #128	; 0x80
- 80002cc:	e04f      	b.n	800036e <WS2812B_Write+0x222>
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
+ 80002c0:	bf00      	nop
+ 80002c2:	bf00      	nop
+ 80002c4:	bf00      	nop
+ 80002c6:	bf00      	nop
+ 80002c8:	bf00      	nop
+ 80002ca:	bf00      	nop
+ 80002cc:	bf00      	nop
  80002ce:	bf00      	nop
  80002d0:	bf00      	nop
  80002d2:	bf00      	nop
@@ -311,6 +442,7 @@ void WS2812B_Write(WS2812B_t* ws2812b) {
  80002e2:	bf00      	nop
  80002e4:	bf00      	nop
  80002e6:	bf00      	nop
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
  80002e8:	bf00      	nop
  80002ea:	bf00      	nop
  80002ec:	bf00      	nop
@@ -323,7 +455,6 @@ void WS2812B_Write(WS2812B_t* ws2812b) {
  80002fa:	bf00      	nop
  80002fc:	bf00      	nop
  80002fe:	bf00      	nop
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
  8000300:	bf00      	nop
  8000302:	bf00      	nop
  8000304:	bf00      	nop
@@ -337,73 +468,75 @@ void WS2812B_Write(WS2812B_t* ws2812b) {
  8000314:	bf00      	nop
  8000316:	bf00      	nop
  8000318:	bf00      	nop
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop");
  800031a:	bf00      	nop
  800031c:	bf00      	nop
  800031e:	bf00      	nop
  8000320:	bf00      	nop
  8000322:	bf00      	nop
- 8000324:	bf00      	nop
- 8000326:	bf00      	nop
- 8000328:	bf00      	nop
+  port->ODR &= ~(pin);//Pin LOW - 120ns
+ 8000324:	68dc      	ldr	r4, [r3, #12]
+ 8000326:	4027      	ands	r7, r4
+ 8000328:	60df      	str	r7, [r3, #12]
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
  800032a:	bf00      	nop
  800032c:	bf00      	nop
  800032e:	bf00      	nop
  8000330:	bf00      	nop
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop");
  8000332:	bf00      	nop
  8000334:	bf00      	nop
  8000336:	bf00      	nop
  8000338:	bf00      	nop
  800033a:	bf00      	nop
-  port->ODR &= ~(pin);//Pin LOW - 120ns
- 800033c:	68dc      	ldr	r4, [r3, #12]
- 800033e:	4027      	ands	r7, r4
- 8000340:	60df      	str	r7, [r3, #12]
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
+ 800033c:	bf00      	nop
+ 800033e:	bf00      	nop
+ 8000340:	bf00      	nop
  8000342:	bf00      	nop
  8000344:	bf00      	nop
  8000346:	bf00      	nop
  8000348:	bf00      	nop
  800034a:	bf00      	nop
  800034c:	bf00      	nop
- 800034e:	bf00      	nop
- 8000350:	bf00      	nop
- 8000352:	bf00      	nop
- 8000354:	bf00      	nop
- 8000356:	bf00      	nop
- 8000358:	bf00      	nop
- 800035a:	bf00      	nop
- 800035c:	bf00      	nop
- 800035e:	bf00      	nop
- 8000360:	bf00      	nop
- 8000362:	bf00      	nop
- 8000364:	bf00      	nop
     for (uint8_t mask = 0x80; mask != 0; mask >>= 1) {
- 8000366:	3901      	subs	r1, #1
- 8000368:	ea4f 0252 	mov.w	r2, r2, lsr #1
- 800036c:	d05a      	beq.n	8000424 <WS2812B_Write+0x2d8>
- 800036e:	6883      	ldr	r3, [r0, #8]
- 8000370:	8984      	ldrh	r4, [r0, #12]
+ 800034e:	3901      	subs	r1, #1
+ 8000350:	ea4f 0252 	mov.w	r2, r2, lsr #1
+ 8000354:	d05a      	beq.n	800040c <WS2812B_Write+0x17c>
+ 8000356:	6883      	ldr	r3, [r0, #8]
+ 8000358:	8984      	ldrh	r4, [r0, #12]
   port->ODR |= pin; //Pin HIGH - 120ns
- 8000372:	f8d3 e00c 	ldr.w	lr, [r3, #12]
- 8000376:	43e7      	mvns	r7, r4
-      if (led.r & mask) {
- 8000378:	ea1c 0f02 	tst.w	ip, r2
+ 800035a:	f8d3 e00c 	ldr.w	lr, [r3, #12]
+ 800035e:	43e7      	mvns	r7, r4
+      if (led.g & mask) {
+ 8000360:	ea18 0f02 	tst.w	r8, r2
   port->ODR |= pin; //Pin HIGH - 120ns
- 800037c:	ea4e 0404 	orr.w	r4, lr, r4
- 8000380:	60dc      	str	r4, [r3, #12]
-      if (led.r & mask) {
- 8000382:	d1a4      	bne.n	80002ce <WS2812B_Write+0x182>
+ 8000364:	ea4e 0404 	orr.w	r4, lr, r4
+ 8000368:	60dc      	str	r4, [r3, #12]
+      if (led.g & mask) {
+ 800036a:	d1a4      	bne.n	80002b6 <WS2812B_Write+0x26>
 	__asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
+ 800036c:	bf00      	nop
+ 800036e:	bf00      	nop
+ 8000370:	bf00      	nop
+ 8000372:	bf00      	nop
+ 8000374:	bf00      	nop
+ 8000376:	bf00      	nop
+ 8000378:	bf00      	nop
+ 800037a:	bf00      	nop
+ 800037c:	bf00      	nop
+ 800037e:	bf00      	nop
+ 8000380:	bf00      	nop
+ 8000382:	bf00      	nop
  8000384:	bf00      	nop
  8000386:	bf00      	nop
  8000388:	bf00      	nop
  800038a:	bf00      	nop
  800038c:	bf00      	nop
  800038e:	bf00      	nop
- 8000390:	bf00      	nop
- 8000392:	bf00      	nop
- 8000394:	bf00      	nop
+  	port->ODR &= ~(pin); //Pin LOW - 120ns
+ 8000390:	68dc      	ldr	r4, [r3, #12]
+ 8000392:	4027      	ands	r7, r4
+ 8000394:	60df      	str	r7, [r3, #12]
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
  8000396:	bf00      	nop
  8000398:	bf00      	nop
  800039a:	bf00      	nop
@@ -413,11 +546,9 @@ void WS2812B_Write(WS2812B_t* ws2812b) {
  80003a2:	bf00      	nop
  80003a4:	bf00      	nop
  80003a6:	bf00      	nop
-  	port->ODR &= ~(pin); //Pin LOW - 120ns
- 80003a8:	68dc      	ldr	r4, [r3, #12]
- 80003aa:	4027      	ands	r7, r4
- 80003ac:	60df      	str	r7, [r3, #12]
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
+ 80003a8:	bf00      	nop
+ 80003aa:	bf00      	nop
+ 80003ac:	bf00      	nop
  80003ae:	bf00      	nop
  80003b0:	bf00      	nop
  80003b2:	bf00      	nop
@@ -431,6 +562,7 @@ void WS2812B_Write(WS2812B_t* ws2812b) {
  80003c2:	bf00      	nop
  80003c4:	bf00      	nop
  80003c6:	bf00      	nop
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
  80003c8:	bf00      	nop
  80003ca:	bf00      	nop
  80003cc:	bf00      	nop
@@ -443,7 +575,6 @@ void WS2812B_Write(WS2812B_t* ws2812b) {
  80003da:	bf00      	nop
  80003dc:	bf00      	nop
  80003de:	bf00      	nop
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
  80003e0:	bf00      	nop
  80003e2:	bf00      	nop
  80003e4:	bf00      	nop
@@ -457,38 +588,38 @@ void WS2812B_Write(WS2812B_t* ws2812b) {
  80003f4:	bf00      	nop
  80003f6:	bf00      	nop
  80003f8:	bf00      	nop
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop");
  80003fa:	bf00      	nop
  80003fc:	bf00      	nop
  80003fe:	bf00      	nop
  8000400:	bf00      	nop
  8000402:	bf00      	nop
- 8000404:	bf00      	nop
- 8000406:	bf00      	nop
- 8000408:	bf00      	nop
- 800040a:	bf00      	nop
- 800040c:	bf00      	nop
- 800040e:	bf00      	nop
- 8000410:	bf00      	nop
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop");
+    for (uint8_t mask = 0x80; mask != 0; mask >>= 1) {
+ 8000404:	3901      	subs	r1, #1
+ 8000406:	ea4f 0252 	mov.w	r2, r2, lsr #1
+ 800040a:	d1a4      	bne.n	8000356 <WS2812B_Write+0xc6>
+ 800040c:	2108      	movs	r1, #8
+        send_zero(ws2812b->port, ws2812b->pin);
+      }
+    }
+
+    // Red
+    for (uint8_t mask = 0x80; mask != 0; mask >>= 1) {
+ 800040e:	2280      	movs	r2, #128	; 0x80
+ 8000410:	e04f      	b.n	80004b2 <WS2812B_Write+0x222>
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
  8000412:	bf00      	nop
  8000414:	bf00      	nop
  8000416:	bf00      	nop
  8000418:	bf00      	nop
  800041a:	bf00      	nop
-    for (uint8_t mask = 0x80; mask != 0; mask >>= 1) {
- 800041c:	3901      	subs	r1, #1
- 800041e:	ea4f 0252 	mov.w	r2, r2, lsr #1
- 8000422:	d1a4      	bne.n	800036e <WS2812B_Write+0x222>
- 8000424:	2108      	movs	r1, #8
-        send_zero(ws2812b->port, ws2812b->pin);
-      }
-    }
-
-    // Blue
-    for (uint8_t mask = 0x80; mask != 0; mask >>= 1) {
- 8000426:	2280      	movs	r2, #128	; 0x80
- 8000428:	e04f      	b.n	80004ca <WS2812B_Write+0x37e>
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
+ 800041c:	bf00      	nop
+ 800041e:	bf00      	nop
+ 8000420:	bf00      	nop
+ 8000422:	bf00      	nop
+ 8000424:	bf00      	nop
+ 8000426:	bf00      	nop
+ 8000428:	bf00      	nop
  800042a:	bf00      	nop
  800042c:	bf00      	nop
  800042e:	bf00      	nop
@@ -502,6 +633,7 @@ void WS2812B_Write(WS2812B_t* ws2812b) {
  800043e:	bf00      	nop
  8000440:	bf00      	nop
  8000442:	bf00      	nop
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
  8000444:	bf00      	nop
  8000446:	bf00      	nop
  8000448:	bf00      	nop
@@ -514,7 +646,6 @@ void WS2812B_Write(WS2812B_t* ws2812b) {
  8000456:	bf00      	nop
  8000458:	bf00      	nop
  800045a:	bf00      	nop
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
  800045c:	bf00      	nop
  800045e:	bf00      	nop
  8000460:	bf00      	nop
@@ -528,64 +659,63 @@ void WS2812B_Write(WS2812B_t* ws2812b) {
  8000470:	bf00      	nop
  8000472:	bf00      	nop
  8000474:	bf00      	nop
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop");
  8000476:	bf00      	nop
  8000478:	bf00      	nop
  800047a:	bf00      	nop
  800047c:	bf00      	nop
  800047e:	bf00      	nop
- 8000480:	bf00      	nop
- 8000482:	bf00      	nop
- 8000484:	bf00      	nop
+  port->ODR &= ~(pin);//Pin LOW - 120ns
+ 8000480:	68dc      	ldr	r4, [r3, #12]
+ 8000482:	4027      	ands	r7, r4
+ 8000484:	60df      	str	r7, [r3, #12]
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
  8000486:	bf00      	nop
  8000488:	bf00      	nop
  800048a:	bf00      	nop
  800048c:	bf00      	nop
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop");
  800048e:	bf00      	nop
  8000490:	bf00      	nop
  8000492:	bf00      	nop
  8000494:	bf00      	nop
  8000496:	bf00      	nop
-  port->ODR &= ~(pin);//Pin LOW - 120ns
- 8000498:	68dc      	ldr	r4, [r3, #12]
- 800049a:	4027      	ands	r7, r4
- 800049c:	60df      	str	r7, [r3, #12]
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
+ 8000498:	bf00      	nop
+ 800049a:	bf00      	nop
+ 800049c:	bf00      	nop
  800049e:	bf00      	nop
  80004a0:	bf00      	nop
  80004a2:	bf00      	nop
  80004a4:	bf00      	nop
  80004a6:	bf00      	nop
  80004a8:	bf00      	nop
- 80004aa:	bf00      	nop
- 80004ac:	bf00      	nop
- 80004ae:	bf00      	nop
- 80004b0:	bf00      	nop
- 80004b2:	bf00      	nop
- 80004b4:	bf00      	nop
- 80004b6:	bf00      	nop
- 80004b8:	bf00      	nop
- 80004ba:	bf00      	nop
- 80004bc:	bf00      	nop
- 80004be:	bf00      	nop
- 80004c0:	bf00      	nop
     for (uint8_t mask = 0x80; mask != 0; mask >>= 1) {
- 80004c2:	3901      	subs	r1, #1
- 80004c4:	ea4f 0252 	mov.w	r2, r2, lsr #1
- 80004c8:	d059      	beq.n	800057e <WS2812B_Write+0x432>
- 80004ca:	6883      	ldr	r3, [r0, #8]
- 80004cc:	8984      	ldrh	r4, [r0, #12]
+ 80004aa:	3901      	subs	r1, #1
+ 80004ac:	ea4f 0252 	mov.w	r2, r2, lsr #1
+ 80004b0:	d05a      	beq.n	8000568 <WS2812B_Write+0x2d8>
+ 80004b2:	6883      	ldr	r3, [r0, #8]
+ 80004b4:	8984      	ldrh	r4, [r0, #12]
   port->ODR |= pin; //Pin HIGH - 120ns
- 80004ce:	f8d3 c00c 	ldr.w	ip, [r3, #12]
- 80004d2:	43e7      	mvns	r7, r4
-      if (led.b & mask) {
- 80004d4:	4215      	tst	r5, r2
+ 80004b6:	f8d3 e00c 	ldr.w	lr, [r3, #12]
+ 80004ba:	43e7      	mvns	r7, r4
+      if (led.r & mask) {
+ 80004bc:	ea1c 0f02 	tst.w	ip, r2
   port->ODR |= pin; //Pin HIGH - 120ns
- 80004d6:	ea4c 0404 	orr.w	r4, ip, r4
- 80004da:	60dc      	str	r4, [r3, #12]
-      if (led.b & mask) {
- 80004dc:	d1a5      	bne.n	800042a <WS2812B_Write+0x2de>
+ 80004c0:	ea4e 0404 	orr.w	r4, lr, r4
+ 80004c4:	60dc      	str	r4, [r3, #12]
+      if (led.r & mask) {
+ 80004c6:	d1a4      	bne.n	8000412 <WS2812B_Write+0x182>
 	__asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
+ 80004c8:	bf00      	nop
+ 80004ca:	bf00      	nop
+ 80004cc:	bf00      	nop
+ 80004ce:	bf00      	nop
+ 80004d0:	bf00      	nop
+ 80004d2:	bf00      	nop
+ 80004d4:	bf00      	nop
+ 80004d6:	bf00      	nop
+ 80004d8:	bf00      	nop
+ 80004da:	bf00      	nop
+ 80004dc:	bf00      	nop
  80004de:	bf00      	nop
  80004e0:	bf00      	nop
  80004e2:	bf00      	nop
@@ -593,9 +723,11 @@ void WS2812B_Write(WS2812B_t* ws2812b) {
  80004e6:	bf00      	nop
  80004e8:	bf00      	nop
  80004ea:	bf00      	nop
- 80004ec:	bf00      	nop
- 80004ee:	bf00      	nop
- 80004f0:	bf00      	nop
+  	port->ODR &= ~(pin); //Pin LOW - 120ns
+ 80004ec:	68dc      	ldr	r4, [r3, #12]
+ 80004ee:	4027      	ands	r7, r4
+ 80004f0:	60df      	str	r7, [r3, #12]
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
  80004f2:	bf00      	nop
  80004f4:	bf00      	nop
  80004f6:	bf00      	nop
@@ -604,11 +736,9 @@ void WS2812B_Write(WS2812B_t* ws2812b) {
  80004fc:	bf00      	nop
  80004fe:	bf00      	nop
  8000500:	bf00      	nop
-  	port->ODR &= ~(pin); //Pin LOW - 120ns
- 8000502:	68dc      	ldr	r4, [r3, #12]
- 8000504:	4027      	ands	r7, r4
- 8000506:	60df      	str	r7, [r3, #12]
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
+ 8000502:	bf00      	nop
+ 8000504:	bf00      	nop
+ 8000506:	bf00      	nop
  8000508:	bf00      	nop
  800050a:	bf00      	nop
  800050c:	bf00      	nop
@@ -623,6 +753,7 @@ void WS2812B_Write(WS2812B_t* ws2812b) {
  800051e:	bf00      	nop
  8000520:	bf00      	nop
  8000522:	bf00      	nop
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
  8000524:	bf00      	nop
  8000526:	bf00      	nop
  8000528:	bf00      	nop
@@ -634,7 +765,6 @@ void WS2812B_Write(WS2812B_t* ws2812b) {
  8000534:	bf00      	nop
  8000536:	bf00      	nop
  8000538:	bf00      	nop
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
  800053a:	bf00      	nop
  800053c:	bf00      	nop
  800053e:	bf00      	nop
@@ -649,467 +779,337 @@ void WS2812B_Write(WS2812B_t* ws2812b) {
  8000550:	bf00      	nop
  8000552:	bf00      	nop
  8000554:	bf00      	nop
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop");
  8000556:	bf00      	nop
  8000558:	bf00      	nop
  800055a:	bf00      	nop
  800055c:	bf00      	nop
  800055e:	bf00      	nop
- 8000560:	bf00      	nop
- 8000562:	bf00      	nop
- 8000564:	bf00      	nop
- 8000566:	bf00      	nop
- 8000568:	bf00      	nop
- 800056a:	bf00      	nop
-  __asm__ volatile("nop\nnop\nnop\nnop\nnop");
- 800056c:	bf00      	nop
+    for (uint8_t mask = 0x80; mask != 0; mask >>= 1) {
+ 8000560:	3901      	subs	r1, #1
+ 8000562:	ea4f 0252 	mov.w	r2, r2, lsr #1
+ 8000566:	d1a4      	bne.n	80004b2 <WS2812B_Write+0x222>
+ 8000568:	2108      	movs	r1, #8
+        send_zero(ws2812b->port, ws2812b->pin);
+      }
+    }
+
+    // Blue
+    for (uint8_t mask = 0x80; mask != 0; mask >>= 1) {
+ 800056a:	2280      	movs	r2, #128	; 0x80
+ 800056c:	e04f      	b.n	800060e <WS2812B_Write+0x37e>
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
  800056e:	bf00      	nop
  8000570:	bf00      	nop
  8000572:	bf00      	nop
  8000574:	bf00      	nop
+ 8000576:	bf00      	nop
+ 8000578:	bf00      	nop
+ 800057a:	bf00      	nop
+ 800057c:	bf00      	nop
+ 800057e:	bf00      	nop
+ 8000580:	bf00      	nop
+ 8000582:	bf00      	nop
+ 8000584:	bf00      	nop
+ 8000586:	bf00      	nop
+ 8000588:	bf00      	nop
+ 800058a:	bf00      	nop
+ 800058c:	bf00      	nop
+ 800058e:	bf00      	nop
+ 8000590:	bf00      	nop
+ 8000592:	bf00      	nop
+ 8000594:	bf00      	nop
+ 8000596:	bf00      	nop
+ 8000598:	bf00      	nop
+ 800059a:	bf00      	nop
+ 800059c:	bf00      	nop
+ 800059e:	bf00      	nop
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
+ 80005a0:	bf00      	nop
+ 80005a2:	bf00      	nop
+ 80005a4:	bf00      	nop
+ 80005a6:	bf00      	nop
+ 80005a8:	bf00      	nop
+ 80005aa:	bf00      	nop
+ 80005ac:	bf00      	nop
+ 80005ae:	bf00      	nop
+ 80005b0:	bf00      	nop
+ 80005b2:	bf00      	nop
+ 80005b4:	bf00      	nop
+ 80005b6:	bf00      	nop
+ 80005b8:	bf00      	nop
+ 80005ba:	bf00      	nop
+ 80005bc:	bf00      	nop
+ 80005be:	bf00      	nop
+ 80005c0:	bf00      	nop
+ 80005c2:	bf00      	nop
+ 80005c4:	bf00      	nop
+ 80005c6:	bf00      	nop
+ 80005c8:	bf00      	nop
+ 80005ca:	bf00      	nop
+ 80005cc:	bf00      	nop
+ 80005ce:	bf00      	nop
+ 80005d0:	bf00      	nop
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop");
+ 80005d2:	bf00      	nop
+ 80005d4:	bf00      	nop
+ 80005d6:	bf00      	nop
+ 80005d8:	bf00      	nop
+ 80005da:	bf00      	nop
+  port->ODR &= ~(pin);//Pin LOW - 120ns
+ 80005dc:	68dc      	ldr	r4, [r3, #12]
+ 80005de:	4027      	ands	r7, r4
+ 80005e0:	60df      	str	r7, [r3, #12]
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
+ 80005e2:	bf00      	nop
+ 80005e4:	bf00      	nop
+ 80005e6:	bf00      	nop
+ 80005e8:	bf00      	nop
+ 80005ea:	bf00      	nop
+ 80005ec:	bf00      	nop
+ 80005ee:	bf00      	nop
+ 80005f0:	bf00      	nop
+ 80005f2:	bf00      	nop
+ 80005f4:	bf00      	nop
+ 80005f6:	bf00      	nop
+ 80005f8:	bf00      	nop
+ 80005fa:	bf00      	nop
+ 80005fc:	bf00      	nop
+ 80005fe:	bf00      	nop
+ 8000600:	bf00      	nop
+ 8000602:	bf00      	nop
+ 8000604:	bf00      	nop
     for (uint8_t mask = 0x80; mask != 0; mask >>= 1) {
- 8000576:	3901      	subs	r1, #1
- 8000578:	ea4f 0252 	mov.w	r2, r2, lsr #1
- 800057c:	d1a5      	bne.n	80004ca <WS2812B_Write+0x37e>
+ 8000606:	3901      	subs	r1, #1
+ 8000608:	ea4f 0252 	mov.w	r2, r2, lsr #1
+ 800060c:	d059      	beq.n	80006c2 <WS2812B_Write+0x432>
+ 800060e:	6883      	ldr	r3, [r0, #8]
+ 8000610:	8984      	ldrh	r4, [r0, #12]
+  port->ODR |= pin; //Pin HIGH - 120ns
+ 8000612:	f8d3 c00c 	ldr.w	ip, [r3, #12]
+ 8000616:	43e7      	mvns	r7, r4
+      if (led.b & mask) {
+ 8000618:	4215      	tst	r5, r2
+  port->ODR |= pin; //Pin HIGH - 120ns
+ 800061a:	ea4c 0404 	orr.w	r4, ip, r4
+ 800061e:	60dc      	str	r4, [r3, #12]
+      if (led.b & mask) {
+ 8000620:	d1a5      	bne.n	800056e <WS2812B_Write+0x2de>
+	__asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
+ 8000622:	bf00      	nop
+ 8000624:	bf00      	nop
+ 8000626:	bf00      	nop
+ 8000628:	bf00      	nop
+ 800062a:	bf00      	nop
+ 800062c:	bf00      	nop
+ 800062e:	bf00      	nop
+ 8000630:	bf00      	nop
+ 8000632:	bf00      	nop
+ 8000634:	bf00      	nop
+ 8000636:	bf00      	nop
+ 8000638:	bf00      	nop
+ 800063a:	bf00      	nop
+ 800063c:	bf00      	nop
+ 800063e:	bf00      	nop
+ 8000640:	bf00      	nop
+ 8000642:	bf00      	nop
+ 8000644:	bf00      	nop
+  	port->ODR &= ~(pin); //Pin LOW - 120ns
+ 8000646:	68dc      	ldr	r4, [r3, #12]
+ 8000648:	4027      	ands	r7, r4
+ 800064a:	60df      	str	r7, [r3, #12]
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
+ 800064c:	bf00      	nop
+ 800064e:	bf00      	nop
+ 8000650:	bf00      	nop
+ 8000652:	bf00      	nop
+ 8000654:	bf00      	nop
+ 8000656:	bf00      	nop
+ 8000658:	bf00      	nop
+ 800065a:	bf00      	nop
+ 800065c:	bf00      	nop
+ 800065e:	bf00      	nop
+ 8000660:	bf00      	nop
+ 8000662:	bf00      	nop
+ 8000664:	bf00      	nop
+ 8000666:	bf00      	nop
+ 8000668:	bf00      	nop
+ 800066a:	bf00      	nop
+ 800066c:	bf00      	nop
+ 800066e:	bf00      	nop
+ 8000670:	bf00      	nop
+ 8000672:	bf00      	nop
+ 8000674:	bf00      	nop
+ 8000676:	bf00      	nop
+ 8000678:	bf00      	nop
+ 800067a:	bf00      	nop
+ 800067c:	bf00      	nop
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\nnop\n");
+ 800067e:	bf00      	nop
+ 8000680:	bf00      	nop
+ 8000682:	bf00      	nop
+ 8000684:	bf00      	nop
+ 8000686:	bf00      	nop
+ 8000688:	bf00      	nop
+ 800068a:	bf00      	nop
+ 800068c:	bf00      	nop
+ 800068e:	bf00      	nop
+ 8000690:	bf00      	nop
+ 8000692:	bf00      	nop
+ 8000694:	bf00      	nop
+ 8000696:	bf00      	nop
+ 8000698:	bf00      	nop
+ 800069a:	bf00      	nop
+ 800069c:	bf00      	nop
+ 800069e:	bf00      	nop
+ 80006a0:	bf00      	nop
+ 80006a2:	bf00      	nop
+ 80006a4:	bf00      	nop
+ 80006a6:	bf00      	nop
+ 80006a8:	bf00      	nop
+ 80006aa:	bf00      	nop
+ 80006ac:	bf00      	nop
+ 80006ae:	bf00      	nop
+  __asm__ volatile("nop\nnop\nnop\nnop\nnop");
+ 80006b0:	bf00      	nop
+ 80006b2:	bf00      	nop
+ 80006b4:	bf00      	nop
+ 80006b6:	bf00      	nop
+ 80006b8:	bf00      	nop
+    for (uint8_t mask = 0x80; mask != 0; mask >>= 1) {
+ 80006ba:	3901      	subs	r1, #1
+ 80006bc:	ea4f 0252 	mov.w	r2, r2, lsr #1
+ 80006c0:	d1a5      	bne.n	800060e <WS2812B_Write+0x37e>
   for (uint16_t i = 0; i < ws2812b->num_leds; i++) {
- 800057e:	3601      	adds	r6, #1
- 8000580:	8883      	ldrh	r3, [r0, #4]
- 8000582:	b2b6      	uxth	r6, r6
- 8000584:	42b3      	cmp	r3, r6
- 8000586:	f63f ade8 	bhi.w	800015a <WS2812B_Write+0xe>
+ 80006c2:	3601      	adds	r6, #1
+ 80006c4:	8883      	ldrh	r3, [r0, #4]
+ 80006c6:	b2b6      	uxth	r6, r6
+ 80006c8:	42b3      	cmp	r3, r6
+ 80006ca:	f63f ade8 	bhi.w	800029e <WS2812B_Write+0xe>
     for (uint8_t mask = 0x80; mask != 0; mask >>= 1) {
- 800058a:	f44f 7316 	mov.w	r3, #600	; 0x258
+ 80006ce:	f44f 7316 	mov.w	r3, #600	; 0x258
     }
   }
 
   // Reset code - optional, may not need this piece of code
   for (uint16_t i = 0; i < 600; i++) {
     __asm__ volatile("nop\nnop\n");
- 800058e:	bf00      	nop
- 8000590:	bf00      	nop
- 8000592:	3b01      	subs	r3, #1
- 8000594:	b29b      	uxth	r3, r3
+ 80006d2:	bf00      	nop
+ 80006d4:	bf00      	nop
+ 80006d6:	3b01      	subs	r3, #1
+ 80006d8:	b29b      	uxth	r3, r3
   for (uint16_t i = 0; i < 600; i++) {
- 8000596:	2b00      	cmp	r3, #0
- 8000598:	d1f9      	bne.n	800058e <WS2812B_Write+0x442>
+ 80006da:	2b00      	cmp	r3, #0
+ 80006dc:	d1f9      	bne.n	80006d2 <WS2812B_Write+0x442>
   }
 }
- 800059a:	e8bd 81f0 	ldmia.w	sp!, {r4, r5, r6, r7, r8, pc}
- 800059e:	bf00      	nop
+ 80006de:	e8bd 81f0 	ldmia.w	sp!, {r4, r5, r6, r7, r8, pc}
+ 80006e2:	bf00      	nop
 
-080005a0 <initWs2812b>:
+080006e4 <initWs2812b>:
 {
- 80005a0:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 80006e4:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
 	leds[ledIndex].r = red;
- 80005a2:	2500      	movs	r5, #0
- 80005a4:	4c06      	ldr	r4, [pc, #24]	; (80005c0 <initWs2812b+0x20>)
+ 80006e6:	2500      	movs	r5, #0
+ 80006e8:	4c06      	ldr	r4, [pc, #24]	; (8000704 <initWs2812b+0x20>)
 	WS2812B_Write(&ws2812b);
- 80005a6:	4f07      	ldr	r7, [pc, #28]	; (80005c4 <initWs2812b+0x24>)
- 80005a8:	f104 060c 	add.w	r6, r4, #12
+ 80006ea:	4f07      	ldr	r7, [pc, #28]	; (8000708 <initWs2812b+0x24>)
+ 80006ec:	f104 060c 	add.w	r6, r4, #12
 	leds[ledIndex].r = red;
- 80005ac:	7025      	strb	r5, [r4, #0]
+ 80006f0:	7025      	strb	r5, [r4, #0]
 	leds[ledIndex].g = green;
- 80005ae:	7065      	strb	r5, [r4, #1]
+ 80006f2:	7065      	strb	r5, [r4, #1]
 	leds[ledIndex].b = blue;
- 80005b0:	70a5      	strb	r5, [r4, #2]
+ 80006f4:	70a5      	strb	r5, [r4, #2]
 	WS2812B_Write(&ws2812b);
- 80005b2:	4638      	mov	r0, r7
- 80005b4:	3403      	adds	r4, #3
- 80005b6:	f7ff fdc9 	bl	800014c <WS2812B_Write>
+ 80006f6:	4638      	mov	r0, r7
+ 80006f8:	3403      	adds	r4, #3
+ 80006fa:	f7ff fdc9 	bl	8000290 <WS2812B_Write>
 	for (uint8_t led = 0; led < NUMBER_OF_LEDS; led++)
- 80005ba:	42b4      	cmp	r4, r6
- 80005bc:	d1f6      	bne.n	80005ac <initWs2812b+0xc>
+ 80006fe:	42b4      	cmp	r4, r6
+ 8000700:	d1f6      	bne.n	80006f0 <initWs2812b+0xc>
 }
- 80005be:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
- 80005c0:	2000003c 	.word	0x2000003c
- 80005c4:	20000000 	.word	0x20000000
+ 8000702:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
+ 8000704:	2000003c 	.word	0x2000003c
+ 8000708:	20000004 	.word	0x20000004
 
-080005c8 <running_example>:
+0800070c <running_example>:
 void running_example(void){
- 80005c8:	e92d 41f0 	stmdb	sp!, {r4, r5, r6, r7, r8, lr}
+ 800070c:	e92d 41f0 	stmdb	sp!, {r4, r5, r6, r7, r8, lr}
 	current_led = (current_led + 1) % ws2812b.num_leds;
- 80005cc:	4f20      	ldr	r7, [pc, #128]	; (8000650 <running_example+0x88>)
- 80005ce:	4821      	ldr	r0, [pc, #132]	; (8000654 <running_example+0x8c>)
- 80005d0:	783d      	ldrb	r5, [r7, #0]
- 80005d2:	8882      	ldrh	r2, [r0, #4]
- 80005d4:	1c6b      	adds	r3, r5, #1
- 80005d6:	fb93 f5f2 	sdiv	r5, r3, r2
- 80005da:	fb02 3515 	mls	r5, r2, r5, r3
- 80005de:	fa5f fc85 	uxtb.w	ip, r5
+ 8000710:	4f20      	ldr	r7, [pc, #128]	; (8000794 <running_example+0x88>)
+ 8000712:	4821      	ldr	r0, [pc, #132]	; (8000798 <running_example+0x8c>)
+ 8000714:	783d      	ldrb	r5, [r7, #0]
+ 8000716:	8882      	ldrh	r2, [r0, #4]
+ 8000718:	1c6b      	adds	r3, r5, #1
+ 800071a:	fb93 f5f2 	sdiv	r5, r3, r2
+ 800071e:	fb02 3515 	mls	r5, r2, r5, r3
+ 8000722:	fa5f fc85 	uxtb.w	ip, r5
 	setLEDData(0,55,0, (current_led+1)% ws2812b.num_leds);
- 80005e2:	f10c 0801 	add.w	r8, ip, #1
+ 8000726:	f10c 0801 	add.w	r8, ip, #1
 	setLEDData(55,0,0, (current_led+2)% ws2812b.num_leds);
- 80005e6:	f10c 0e02 	add.w	lr, ip, #2
+ 800072a:	f10c 0e02 	add.w	lr, ip, #2
 	setLEDData(0,55,0, (current_led+1)% ws2812b.num_leds);
- 80005ea:	fb98 f4f2 	sdiv	r4, r8, r2
+ 800072e:	fb98 f4f2 	sdiv	r4, r8, r2
 	setLEDData(55,0,0, (current_led+2)% ws2812b.num_leds);
- 80005ee:	fb9e f1f2 	sdiv	r1, lr, r2
+ 8000732:	fb9e f1f2 	sdiv	r1, lr, r2
 		memset(&leds[i], 0, sizeof(RGB_t));
- 80005f2:	2300      	movs	r3, #0
+ 8000736:	2300      	movs	r3, #0
 	leds[ledIndex].b = blue;
- 80005f4:	2637      	movs	r6, #55	; 0x37
+ 8000738:	2637      	movs	r6, #55	; 0x37
 	setLEDData(0,55,0, (current_led+1)% ws2812b.num_leds);
- 80005f6:	fb02 8414 	mls	r4, r2, r4, r8
+ 800073a:	fb02 8414 	mls	r4, r2, r4, r8
 	setLEDData(55,0,0, (current_led+2)% ws2812b.num_leds);
- 80005fa:	fb02 e111 	mls	r1, r2, r1, lr
- 80005fe:	b2e4      	uxtb	r4, r4
+ 800073e:	fb02 e111 	mls	r1, r2, r1, lr
+ 8000742:	b2e4      	uxtb	r4, r4
 		memset(&leds[i], 0, sizeof(RGB_t));
- 8000600:	4a15      	ldr	r2, [pc, #84]	; (8000658 <running_example+0x90>)
- 8000602:	b2c9      	uxtb	r1, r1
+ 8000744:	4a15      	ldr	r2, [pc, #84]	; (800079c <running_example+0x90>)
+ 8000746:	b2c9      	uxtb	r1, r1
 	leds[ledIndex].r = red;
- 8000604:	eb04 0444 	add.w	r4, r4, r4, lsl #1
- 8000608:	eb0c 0c4c 	add.w	ip, ip, ip, lsl #1
- 800060c:	eb01 0141 	add.w	r1, r1, r1, lsl #1
+ 8000748:	eb04 0444 	add.w	r4, r4, r4, lsl #1
+ 800074c:	eb0c 0c4c 	add.w	ip, ip, ip, lsl #1
+ 8000750:	eb01 0141 	add.w	r1, r1, r1, lsl #1
 	current_led = (current_led + 1) % ws2812b.num_leds;
- 8000610:	703d      	strb	r5, [r7, #0]
+ 8000754:	703d      	strb	r5, [r7, #0]
 	leds[ledIndex].r = red;
- 8000612:	eb02 0e0c 	add.w	lr, r2, ip
- 8000616:	1917      	adds	r7, r2, r4
- 8000618:	1855      	adds	r5, r2, r1
+ 8000756:	eb02 0e0c 	add.w	lr, r2, ip
+ 800075a:	1917      	adds	r7, r2, r4
+ 800075c:	1855      	adds	r5, r2, r1
 		memset(&leds[i], 0, sizeof(RGB_t));
- 800061a:	7153      	strb	r3, [r2, #5]
- 800061c:	8013      	strh	r3, [r2, #0]
- 800061e:	7093      	strb	r3, [r2, #2]
- 8000620:	f8a2 3003 	strh.w	r3, [r2, #3]
- 8000624:	80d3      	strh	r3, [r2, #6]
- 8000626:	f8a2 3009 	strh.w	r3, [r2, #9]
- 800062a:	7213      	strb	r3, [r2, #8]
- 800062c:	72d3      	strb	r3, [r2, #11]
+ 800075e:	7153      	strb	r3, [r2, #5]
+ 8000760:	8013      	strh	r3, [r2, #0]
+ 8000762:	7093      	strb	r3, [r2, #2]
+ 8000764:	f8a2 3003 	strh.w	r3, [r2, #3]
+ 8000768:	80d3      	strh	r3, [r2, #6]
+ 800076a:	f8a2 3009 	strh.w	r3, [r2, #9]
+ 800076e:	7213      	strb	r3, [r2, #8]
+ 8000770:	72d3      	strb	r3, [r2, #11]
 	leds[ledIndex].r = red;
- 800062e:	f802 300c 	strb.w	r3, [r2, ip]
+ 8000772:	f802 300c 	strb.w	r3, [r2, ip]
 	leds[ledIndex].g = green;
- 8000632:	f88e 3001 	strb.w	r3, [lr, #1]
+ 8000776:	f88e 3001 	strb.w	r3, [lr, #1]
 	leds[ledIndex].b = blue;
- 8000636:	f88e 6002 	strb.w	r6, [lr, #2]
+ 800077a:	f88e 6002 	strb.w	r6, [lr, #2]
 	leds[ledIndex].r = red;
- 800063a:	5513      	strb	r3, [r2, r4]
+ 800077e:	5513      	strb	r3, [r2, r4]
 	leds[ledIndex].g = green;
- 800063c:	707e      	strb	r6, [r7, #1]
+ 8000780:	707e      	strb	r6, [r7, #1]
 	leds[ledIndex].b = blue;
- 800063e:	70bb      	strb	r3, [r7, #2]
+ 8000782:	70bb      	strb	r3, [r7, #2]
 	leds[ledIndex].r = red;
- 8000640:	5456      	strb	r6, [r2, r1]
+ 8000784:	5456      	strb	r6, [r2, r1]
 	leds[ledIndex].g = green;
- 8000642:	706b      	strb	r3, [r5, #1]
+ 8000786:	706b      	strb	r3, [r5, #1]
 	leds[ledIndex].b = blue;
- 8000644:	70ab      	strb	r3, [r5, #2]
+ 8000788:	70ab      	strb	r3, [r5, #2]
 }
- 8000646:	e8bd 41f0 	ldmia.w	sp!, {r4, r5, r6, r7, r8, lr}
+ 800078a:	e8bd 41f0 	ldmia.w	sp!, {r4, r5, r6, r7, r8, lr}
 	WS2812B_Write(&ws2812b);
- 800064a:	f7ff bd7f 	b.w	800014c <WS2812B_Write>
- 800064e:	bf00      	nop
- 8000650:	20000038 	.word	0x20000038
- 8000654:	20000000 	.word	0x20000000
- 8000658:	2000003c 	.word	0x2000003c
-
-0800065c <SystemClock_Config>:
-/**
-  * @brief System Clock Configuration
-  * @retval None
-  */
-void SystemClock_Config(void)
-{
- 800065c:	b530      	push	{r4, r5, lr}
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-
-  /** Initializes the CPU, AHB and APB busses clocks 
-  */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
- 800065e:	2201      	movs	r2, #1
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
- 8000660:	2400      	movs	r4, #0
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
- 8000662:	f44f 3380 	mov.w	r3, #65536	; 0x10000
-  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
- 8000666:	2502      	movs	r5, #2
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
- 8000668:	f44f 11e0 	mov.w	r1, #1835008	; 0x1c0000
-{
- 800066c:	b091      	sub	sp, #68	; 0x44
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
- 800066e:	a806      	add	r0, sp, #24
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
- 8000670:	9206      	str	r2, [sp, #24]
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
- 8000672:	920a      	str	r2, [sp, #40]	; 0x28
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
- 8000674:	9307      	str	r3, [sp, #28]
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
- 8000676:	e9cd 530d 	strd	r5, r3, [sp, #52]	; 0x34
-  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
- 800067a:	910f      	str	r1, [sp, #60]	; 0x3c
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
- 800067c:	9408      	str	r4, [sp, #32]
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
- 800067e:	9401      	str	r4, [sp, #4]
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
- 8000680:	9409      	str	r4, [sp, #36]	; 0x24
- 8000682:	e9cd 440b 	strd	r4, r4, [sp, #44]	; 0x2c
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
- 8000686:	e9cd 4402 	strd	r4, r4, [sp, #8]
- 800068a:	e9cd 4404 	strd	r4, r4, [sp, #16]
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
- 800068e:	f000 fa65 	bl	8000b5c <HAL_RCC_OscConfig>
-  {
-    Error_Handler();
-  }
-  /** Initializes the CPU, AHB and APB busses clocks 
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
- 8000692:	220f      	movs	r2, #15
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
- 8000694:	f44f 6380 	mov.w	r3, #1024	; 0x400
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
-
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
- 8000698:	a801      	add	r0, sp, #4
- 800069a:	4629      	mov	r1, r5
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
- 800069c:	e9cd 5402 	strd	r5, r4, [sp, #8]
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
- 80006a0:	9405      	str	r4, [sp, #20]
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
- 80006a2:	9201      	str	r2, [sp, #4]
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
- 80006a4:	9304      	str	r3, [sp, #16]
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
- 80006a6:	f000 fc51 	bl	8000f4c <HAL_RCC_ClockConfig>
-  {
-    Error_Handler();
-  }
-}
- 80006aa:	b011      	add	sp, #68	; 0x44
- 80006ac:	bd30      	pop	{r4, r5, pc}
- 80006ae:	bf00      	nop
-
-080006b0 <main>:
-  * @param None
-  * @retval None
-  */
-static void MX_GPIO_Init(void)
-{
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
- 80006b0:	2400      	movs	r4, #0
-{
- 80006b2:	b500      	push	{lr}
- 80006b4:	b089      	sub	sp, #36	; 0x24
-  HAL_Init();
- 80006b6:	f000 f8bd 	bl	8000834 <HAL_Init>
-  SystemClock_Config();
- 80006ba:	f7ff ffcf 	bl	800065c <SystemClock_Config>
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
- 80006be:	e9cd 4404 	strd	r4, r4, [sp, #16]
- 80006c2:	e9cd 4406 	strd	r4, r4, [sp, #24]
-
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOD_CLK_ENABLE();
- 80006c6:	4b19      	ldr	r3, [pc, #100]	; (800072c <main+0x7c>)
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
- 80006c8:	2201      	movs	r2, #1
-  __HAL_RCC_GPIOD_CLK_ENABLE();
- 80006ca:	6999      	ldr	r1, [r3, #24]
-
-  /*Configure GPIO pin : PB3 */
-  GPIO_InitStruct.Pin = GPIO_PIN_3;
- 80006cc:	2508      	movs	r5, #8
-  __HAL_RCC_GPIOD_CLK_ENABLE();
- 80006ce:	f041 0120 	orr.w	r1, r1, #32
- 80006d2:	6199      	str	r1, [r3, #24]
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
- 80006d4:	2108      	movs	r1, #8
-  __HAL_RCC_GPIOD_CLK_ENABLE();
- 80006d6:	6998      	ldr	r0, [r3, #24]
- 80006d8:	f000 0020 	and.w	r0, r0, #32
- 80006dc:	9001      	str	r0, [sp, #4]
- 80006de:	9801      	ldr	r0, [sp, #4]
-  __HAL_RCC_GPIOA_CLK_ENABLE();
- 80006e0:	6998      	ldr	r0, [r3, #24]
- 80006e2:	f040 0004 	orr.w	r0, r0, #4
- 80006e6:	6198      	str	r0, [r3, #24]
- 80006e8:	6998      	ldr	r0, [r3, #24]
- 80006ea:	f000 0004 	and.w	r0, r0, #4
- 80006ee:	9002      	str	r0, [sp, #8]
- 80006f0:	9802      	ldr	r0, [sp, #8]
-  __HAL_RCC_GPIOB_CLK_ENABLE();
- 80006f2:	6998      	ldr	r0, [r3, #24]
- 80006f4:	4308      	orrs	r0, r1
- 80006f6:	6198      	str	r0, [r3, #24]
- 80006f8:	699b      	ldr	r3, [r3, #24]
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
- 80006fa:	480d      	ldr	r0, [pc, #52]	; (8000730 <main+0x80>)
-  __HAL_RCC_GPIOB_CLK_ENABLE();
- 80006fc:	400b      	ands	r3, r1
- 80006fe:	9303      	str	r3, [sp, #12]
- 8000700:	9b03      	ldr	r3, [sp, #12]
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET);
- 8000702:	f000 fa27 	bl	8000b54 <HAL_GPIO_WritePin>
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
- 8000706:	2201      	movs	r2, #1
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
- 8000708:	2303      	movs	r3, #3
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
- 800070a:	a904      	add	r1, sp, #16
- 800070c:	4808      	ldr	r0, [pc, #32]	; (8000730 <main+0x80>)
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
- 800070e:	e9cd 5204 	strd	r5, r2, [sp, #16]
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
- 8000712:	9307      	str	r3, [sp, #28]
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
- 8000714:	9406      	str	r4, [sp, #24]
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
- 8000716:	f000 f923 	bl	8000960 <HAL_GPIO_Init>
-  initWs2812b();
- 800071a:	f7ff ff41 	bl	80005a0 <initWs2812b>
-    	running_example();
- 800071e:	f7ff ff53 	bl	80005c8 <running_example>
-        HAL_Delay(1000);
- 8000722:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
- 8000726:	f000 f8a9 	bl	800087c <HAL_Delay>
- 800072a:	e7f8      	b.n	800071e <main+0x6e>
- 800072c:	40021000 	.word	0x40021000
- 8000730:	40010c00 	.word	0x40010c00
-
-08000734 <HAL_MspInit>:
-{
-  /* USER CODE BEGIN MspInit 0 */
-
-  /* USER CODE END MspInit 0 */
-
-  __HAL_RCC_AFIO_CLK_ENABLE();
- 8000734:	4b0e      	ldr	r3, [pc, #56]	; (8000770 <HAL_MspInit+0x3c>)
-{
- 8000736:	b082      	sub	sp, #8
-  __HAL_RCC_AFIO_CLK_ENABLE();
- 8000738:	699a      	ldr	r2, [r3, #24]
-
-  /* System interrupt init*/
-
-  /** NOJTAG: JTAG-DP Disabled and SW-DP Enabled 
-  */
-  __HAL_AFIO_REMAP_SWJ_NOJTAG();
- 800073a:	490e      	ldr	r1, [pc, #56]	; (8000774 <HAL_MspInit+0x40>)
-  __HAL_RCC_AFIO_CLK_ENABLE();
- 800073c:	f042 0201 	orr.w	r2, r2, #1
- 8000740:	619a      	str	r2, [r3, #24]
- 8000742:	699a      	ldr	r2, [r3, #24]
- 8000744:	f002 0201 	and.w	r2, r2, #1
- 8000748:	9200      	str	r2, [sp, #0]
- 800074a:	9a00      	ldr	r2, [sp, #0]
-  __HAL_RCC_PWR_CLK_ENABLE();
- 800074c:	69da      	ldr	r2, [r3, #28]
- 800074e:	f042 5280 	orr.w	r2, r2, #268435456	; 0x10000000
- 8000752:	61da      	str	r2, [r3, #28]
- 8000754:	69db      	ldr	r3, [r3, #28]
- 8000756:	f003 5380 	and.w	r3, r3, #268435456	; 0x10000000
- 800075a:	9301      	str	r3, [sp, #4]
- 800075c:	9b01      	ldr	r3, [sp, #4]
-  __HAL_AFIO_REMAP_SWJ_NOJTAG();
- 800075e:	684b      	ldr	r3, [r1, #4]
- 8000760:	f023 63e0 	bic.w	r3, r3, #117440512	; 0x7000000
- 8000764:	f043 7300 	orr.w	r3, r3, #33554432	; 0x2000000
- 8000768:	604b      	str	r3, [r1, #4]
-
-  /* USER CODE BEGIN MspInit 1 */
-
-  /* USER CODE END MspInit 1 */
-}
- 800076a:	b002      	add	sp, #8
- 800076c:	4770      	bx	lr
- 800076e:	bf00      	nop
- 8000770:	40021000 	.word	0x40021000
- 8000774:	40010000 	.word	0x40010000
-
-08000778 <NMI_Handler>:
-
-  /* USER CODE END NonMaskableInt_IRQn 0 */
-  /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
-
-  /* USER CODE END NonMaskableInt_IRQn 1 */
-}
- 8000778:	4770      	bx	lr
- 800077a:	bf00      	nop
-
-0800077c <HardFault_Handler>:
-
-/**
-  * @brief This function handles Hard fault interrupt.
-  */
-void HardFault_Handler(void)
-{
- 800077c:	e7fe      	b.n	800077c <HardFault_Handler>
- 800077e:	bf00      	nop
-
-08000780 <MemManage_Handler>:
-
-/**
-  * @brief This function handles Memory management fault.
-  */
-void MemManage_Handler(void)
-{
- 8000780:	e7fe      	b.n	8000780 <MemManage_Handler>
- 8000782:	bf00      	nop
-
-08000784 <BusFault_Handler>:
-
-/**
-  * @brief This function handles Prefetch fault, memory access fault.
-  */
-void BusFault_Handler(void)
-{
- 8000784:	e7fe      	b.n	8000784 <BusFault_Handler>
- 8000786:	bf00      	nop
-
-08000788 <UsageFault_Handler>:
-
-/**
-  * @brief This function handles Undefined instruction or illegal state.
-  */
-void UsageFault_Handler(void)
-{
- 8000788:	e7fe      	b.n	8000788 <UsageFault_Handler>
- 800078a:	bf00      	nop
-
-0800078c <SVC_Handler>:
- 800078c:	4770      	bx	lr
- 800078e:	bf00      	nop
-
-08000790 <DebugMon_Handler>:
- 8000790:	4770      	bx	lr
+ 800078e:	f7ff bd7f 	b.w	8000290 <WS2812B_Write>
  8000792:	bf00      	nop
-
-08000794 <PendSV_Handler>:
- 8000794:	4770      	bx	lr
- 8000796:	bf00      	nop
-
-08000798 <SysTick_Handler>:
-void SysTick_Handler(void)
-{
-  /* USER CODE BEGIN SysTick_IRQn 0 */
-
-  /* USER CODE END SysTick_IRQn 0 */
-  HAL_IncTick();
- 8000798:	f000 b85e 	b.w	8000858 <HAL_IncTick>
-
-0800079c <SystemInit>:
-
-  /* Configure the Vector Table location -------------------------------------*/
-#if defined(USER_VECT_TAB_ADDRESS)
-  SCB->VTOR = VECT_TAB_BASE_ADDRESS | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM. */
-#endif /* USER_VECT_TAB_ADDRESS */
-}
- 800079c:	4770      	bx	lr
- 800079e:	bf00      	nop
+ 8000794:	20000038 	.word	0x20000038
+ 8000798:	20000004 	.word	0x20000004
+ 800079c:	2000003c 	.word	0x2000003c
 
 080007a0 <Reset_Handler>:
   .weak Reset_Handler
@@ -1176,13 +1176,13 @@ LoopFillZerobss:
 
 /* Call the clock system intitialization function.*/
     bl  SystemInit
- 80007c6:	f7ff ffe9 	bl	800079c <SystemInit>
+ 80007c6:	f7ff fd61 	bl	800028c <SystemInit>
 /* Call static constructors */
     bl __libc_init_array
  80007ca:	f000 fc8b 	bl	80010e4 <__libc_init_array>
 /* Call the application's entry point.*/
   bl main
- 80007ce:	f7ff ff6f 	bl	80006b0 <main>
+ 80007ce:	f7ff fce7 	bl	80001a0 <main>
   bx lr
  80007d2:	4770      	bx	lr
   ldr r0, =_sdata
@@ -1258,7 +1258,7 @@ __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 }
  8000826:	bd38      	pop	{r3, r4, r5, pc}
  8000828:	20000014 	.word	0x20000014
- 800082c:	20000010 	.word	0x20000010
+ 800082c:	20000000 	.word	0x20000000
  8000830:	20000018 	.word	0x20000018
 
 08000834 <HAL_Init>:
@@ -1279,7 +1279,7 @@ __weak HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
  8000846:	2000      	movs	r0, #0
  8000848:	f7ff ffd0 	bl	80007ec <HAL_InitTick>
   HAL_MspInit();
- 800084c:	f7ff ff72 	bl	8000734 <HAL_MspInit>
+ 800084c:	f7ff fcea 	bl	8000224 <HAL_MspInit>
 }
  8000850:	2000      	movs	r0, #0
  8000852:	bd08      	pop	{r3, pc}
@@ -2259,7 +2259,7 @@ static void RCC_Delay(uint32_t mdelay)
  8000e12:	e71b      	b.n	8000c4c <HAL_RCC_OscConfig+0xf0>
  8000e14:	40021000 	.word	0x40021000
  8000e18:	42420480 	.word	0x42420480
- 8000e1c:	20000010 	.word	0x20000010
+ 8000e1c:	20000000 	.word	0x20000000
  8000e20:	10624dd3 	.word	0x10624dd3
  8000e24:	40007000 	.word	0x40007000
  8000e28:	42420000 	.word	0x42420000
@@ -2643,7 +2643,7 @@ if (((RCC_ClkInitStruct->ClockType) & RCC_CLOCKTYPE_PCLK1) == RCC_CLOCKTYPE_PCLK
  80010d0:	003d0900 	.word	0x003d0900
  80010d4:	08001154 	.word	0x08001154
  80010d8:	20000018 	.word	0x20000018
- 80010dc:	20000010 	.word	0x20000010
+ 80010dc:	20000000 	.word	0x20000000
  80010e0:	007a1200 	.word	0x007a1200
 
 080010e4 <__libc_init_array>:

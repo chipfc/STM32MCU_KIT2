@@ -43,8 +43,8 @@ SoftwareW2812.bin \
 all: SoftwareW2812.elf secondary-outputs
 
 # Tool invocations
-SoftwareW2812.elf: $(OBJS) $(USER_OBJS) C:\Users\Nguyet\STM32CubeIDE\workspace_1.3.0\SoftwareW2812\STM32F103RBTX_FLASH.ld
-	arm-none-eabi-gcc -o "SoftwareW2812.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\Nguyet\STM32CubeIDE\workspace_1.3.0\SoftwareW2812\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SoftwareW2812.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+SoftwareW2812.elf: $(OBJS) $(USER_OBJS) C:\Users\Nguyet\STM32CubeIDE\workspace_1.3.0\STM32MCU_KIT2\SoftwareW2812b\STM32F103RBTX_FLASH.ld
+	arm-none-eabi-gcc -o "SoftwareW2812.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\Nguyet\STM32CubeIDE\workspace_1.3.0\STM32MCU_KIT2\SoftwareW2812b\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="SoftwareW2812.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

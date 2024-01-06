@@ -1,5 +1,5 @@
+#include <ws2812b.h>
 #include "main.h"
-#include "LED.h"
 
 static RGB_t leds[NUMBER_OF_LEDS] = {0};
 static WS2812B_t ws2812b = {
