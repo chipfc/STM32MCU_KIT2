@@ -1,4 +1,4 @@
-#include <ws2812b.h>
+#include "ws2812b.h"
 #include "main.h"
 
 static RGB_t leds[NUMBER_OF_LEDS] = {0};
@@ -11,64 +11,33 @@ static WS2812B_t ws2812b = {
 
 
 
-static uint8_t _updateCNT = 0;
-void setAllLEDs(uint8_t red, uint8_t green, uint8_t blue);
-void setLED(uint8_t red, uint8_t green, uint8_t blue, uint8_t ledIndex);
-void setLEDData(uint8_t red, uint8_t green, uint8_t blue, uint8_t ledIndex);
 
 void WS2812B_Write(WS2812B_t* ws2812b);
 
-void animateSine(uint8_t *baseColor, float speed, float scaling, float dimming);
 
-
-void initWs2812b(void)
+void clear_all_leds(void)
 {
-	setAllLEDs(0x0, 0x0, 0x0);
-}
-void running(){
-	uint8_t color[3] = {128, 0, 0};
-	_updateCNT++;
-
-	while(1)
-	{
-		_updateCNT++;
-		animateSine(color, 0.02, 220, 0.8);
-		HAL_Delay(2);
-	}
-}
-//
-void animateSine(uint8_t *baseColor, float speed, float scaling, float dimming)
-{
-	double shift = _updateCNT * speed;
-
-	for (uint8_t leds = 0; leds < NUMBER_OF_LEDS; leds++)
-	{
-		uint8_t red = (baseColor[0] == 0) ? 0 : (baseColor[0] + sin(leds + shift) * scaling * baseColor[0] / 255) * dimming;
-		uint8_t green = (baseColor[1] == 0) ? 0 : (baseColor[1] + sin(leds + shift) * scaling * baseColor[1] / 255) * dimming;
-		uint8_t blue = (baseColor[2] == 0) ? 0 : (baseColor[2] + sin(leds + shift) * scaling * baseColor[2] / 255) * dimming;
-
-		setLED(red, green, blue, leds);
-	}
+	set_all_leds(0x0, 0x0, 0x0);
 }
 
 //Sets all LEDs to the same color of red, green, blue
-void setAllLEDs(uint8_t red, uint8_t green, uint8_t blue)
+void set_all_leds(uint8_t red, uint8_t green, uint8_t blue)
 {
 	for (uint8_t led = 0; led < NUMBER_OF_LEDS; led++)
 	{
-		setLED(red, green, blue, led);
+		set_led(red, green, blue, led);
 	}
 }
 
 //Sets one specific LED to the color of red, green, blue
-void setLEDData(uint8_t red, uint8_t green, uint8_t blue, uint8_t ledIndex)
+void set_led_data(uint8_t red, uint8_t green, uint8_t blue, uint8_t ledIndex)
 {
 	leds[ledIndex].r = red;
 	leds[ledIndex].g = green;
 	leds[ledIndex].b = blue;
 }
 //Sets one specific LED to the color of red, green, blue
-void setLED(uint8_t red, uint8_t green, uint8_t blue, uint8_t ledIndex)
+void set_led(uint8_t red, uint8_t green, uint8_t blue, uint8_t ledIndex)
 {
 	leds[ledIndex].r = red;
 	leds[ledIndex].g = green;
@@ -83,19 +52,7 @@ void clear_ws2812b_buffer(void){
 		memset(&leds[i], 0, sizeof(RGB_t));
 	}
 }
-
-void running_example(void){
-	static   uint8_t current_led = 0;
-
-	clear_ws2812b_buffer();
-	current_led = (current_led + 1) % ws2812b.num_leds;
-	setLEDData(0,0,55, current_led);
-	setLEDData(0,55,0, (current_led+1)% ws2812b.num_leds);
-	setLEDData(55,0,0, (current_led+2)% ws2812b.num_leds);
-//	leds[current_led].b= 55;
-//	leds[(current_led+1)% ws2812b.num_leds].g = 55;
-//	leds[(current_led+2)% ws2812b.num_leds].r = 55;
-
+void display_ws2812b(void){
 	WS2812B_Write(&ws2812b);
 }
 

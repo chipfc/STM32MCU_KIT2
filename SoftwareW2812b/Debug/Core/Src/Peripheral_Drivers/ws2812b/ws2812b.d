@@ -1,4 +1,6 @@
-Core/Src/ws2812b.o: ../Core/Src/ws2812b.c ../Core/Inc/ws2812b.h \
+Core/Src/Peripheral_Drivers/ws2812b/ws2812b.o: \
+ ../Core/Src/Peripheral_Drivers/ws2812b/ws2812b.c \
+ C:/Users/Nguyet/STM32CubeIDE/workspace_1.3.0/STM32MCU_KIT2/SoftwareW2812b/Core/Inc/Peripheral_Drivers/ws2812b/ws2812b.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
  ../Core/Inc/stm32f1xx_hal_conf.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h \
@@ -25,7 +27,7 @@ Core/Src/ws2812b.o: ../Core/Src/ws2812b.c ../Core/Inc/ws2812b.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
  ../Core/Inc/main.h
 
-../Core/Inc/ws2812b.h:
+C:/Users/Nguyet/STM32CubeIDE/workspace_1.3.0/STM32MCU_KIT2/SoftwareW2812b/Core/Inc/Peripheral_Drivers/ws2812b/ws2812b.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
 

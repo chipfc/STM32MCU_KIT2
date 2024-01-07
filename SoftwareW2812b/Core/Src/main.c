@@ -24,7 +24,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <ws2812b.h>
+#include "ws2812b_example.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -96,10 +96,13 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  initWs2812b();
     while (1) {
-    	running_example();
-        HAL_Delay(1000);
+    	for(uint8_t i = 0; i < 4; i ++){
+    		running_example();
+    		HAL_Delay(1000);
+    	}
+
+        running_example_2();
 
     /* USER CODE END WHILE */
 
